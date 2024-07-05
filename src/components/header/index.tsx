@@ -17,7 +17,10 @@ const Header = () => {
         <p className="font-bold text-inherit">NET.Social by Ivan</p>
       </NavbarBrand>
       <NavbarContent justify="end">
-        <NavbarItem className="lg:flex text-3xl cursor-pointer">
+        <NavbarItem
+          className="lg:flex text-3xl cursor-pointer"
+          onClick={() => toggleTheme()}
+        >
           {theme === "light" ? <FaRegMoon /> : <LuSunMedium />}
         </NavbarItem>
         <NavbarItem></NavbarItem>

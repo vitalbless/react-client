@@ -2,34 +2,45 @@ import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import Input from "../components/input"
 import { Button, Link } from "@nextui-org/react"
-import { useLazyCurrentQuery, useLoginMutation } from "../app/services/userApi"
 import { useNavigate } from "react-router-dom"
+import { useRegisterMutation } from "../app/services/userApi"
 
-type Login = { email: string; password: string }
+type Register = {
+  email: string
+  name: string
+  password: string
+}
 type Props = { setSelected: (value: string) => void }
 
-const Login: React.FC<Props> = ({ setSelected }) => {
+const Register: React.FC<Props> = ({ setSelected }) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<Login>({
+  } = useForm<Register>({
     mode: "onChange",
     reValidateMode: "onBlur",
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "", password: "", name: "" },
   })
-  const [login, { isLoading }] = useLoginMutation()
+  const [register, { isLoading }] = useRegisterMutation()
   const navigate = useNavigate()
   const [error, setError] = useState("")
-  const [triggerCurrentCuery] = useLazyCurrentQuery()
 
-  const onSubmit = async (data: Login) => {
+  const onSubmit = async (data: Register) => {
     try {
-      await login(data).unwrap()
+      await register(data).unwrap()
+      setSelected("login")
     } catch (error) {}
   }
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+      <Input
+        control={control}
+        name="name"
+        label="Name"
+        type="text"
+        required="Required field!"
+      />
       <Input
         control={control}
         name="email"
@@ -45,22 +56,22 @@ const Login: React.FC<Props> = ({ setSelected }) => {
         required="Required field!"
       />
       <p className="text-center text-small">
-        Don't have an account?{" "}
+        Already have an account?{" "}
         <Link
           size="sm"
           className="cursor-pointer"
-          onPress={() => setSelected("sign-up")}
+          onPress={() => setSelected("login")}
         >
-          Register
+          Login
         </Link>
       </p>
       <div className="flex gap-2 justify-end">
         <Button fullWidth color="primary" type="submit" isLoading={isLoading}>
-          Login
+          Register
         </Button>
       </div>
     </form>
   )
 }
 
-export default Login
+export default Register

@@ -4,6 +4,8 @@ import Input from "../components/input"
 import { Button, Link } from "@nextui-org/react"
 import { useLazyCurrentQuery, useLoginMutation } from "../app/services/userApi"
 import { useNavigate } from "react-router-dom"
+import ErrorMessage from "../components/error-message"
+import { hasErrorField } from "../utils/has-error-field"
 
 type Login = { email: string; password: string }
 type Props = { setSelected: (value: string) => void }
@@ -26,7 +28,13 @@ const Login: React.FC<Props> = ({ setSelected }) => {
   const onSubmit = async (data: Login) => {
     try {
       await login(data).unwrap()
-    } catch (error) {}
+      await triggerCurrentCuery()
+      navigate("/")
+    } catch (error) {
+      if (hasErrorField(error)) {
+        setError(error.data.error)
+      }
+    }
   }
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -44,6 +52,7 @@ const Login: React.FC<Props> = ({ setSelected }) => {
         type="password"
         required="Required field!"
       />
+      <ErrorMessage error={error} />
       <p className="text-center text-small">
         Don't have an account?{" "}
         <Link

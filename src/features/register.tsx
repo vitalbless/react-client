@@ -4,6 +4,8 @@ import Input from "../components/input"
 import { Button, Link } from "@nextui-org/react"
 import { useNavigate } from "react-router-dom"
 import { useRegisterMutation } from "../app/services/userApi"
+import { hasErrorField } from "../utils/has-error-field"
+import ErrorMessage from "../components/error-message"
 
 type Register = {
   email: string
@@ -30,7 +32,11 @@ const Register: React.FC<Props> = ({ setSelected }) => {
     try {
       await register(data).unwrap()
       setSelected("login")
-    } catch (error) {}
+    } catch (error) {
+      if (hasErrorField(error)) {
+        setError(error.data.error)
+      }
+    }
   }
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -55,6 +61,7 @@ const Register: React.FC<Props> = ({ setSelected }) => {
         type="password"
         required="Required field!"
       />
+      <ErrorMessage error={error} />
       <p className="text-center text-small">
         Already have an account?{" "}
         <Link

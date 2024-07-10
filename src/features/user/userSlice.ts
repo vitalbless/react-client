@@ -46,3 +46,14 @@ const slice = createSlice({
 })
 export const { logout, resetUser } = slice.actions
 export default slice.reducer
+
+//селекторы нужны чтобы забирать значения из initialState
+
+export const selectIsAuthenticated = (state: RootState) =>
+  state.user.isAuthenticated
+
+export const selectCurrent = (state: RootState) => state.user.current
+
+export const selectUsers = (state: RootState) => state.user.users
+
+export const selectUser = (state: RootState) => state.user.user

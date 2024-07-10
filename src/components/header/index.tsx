@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="font-bold text-inherit">NET.Social by Ivan</p>
+        <p className="font-bold text-inherit">NET.Social</p>
       </NavbarBrand>
       <NavbarContent justify="end">
         <NavbarItem

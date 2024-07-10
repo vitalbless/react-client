@@ -1,11 +1,14 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import Input from "../components/input"
+import Input from "../../components/input"
 import { Button, Link } from "@nextui-org/react"
-import { useLazyCurrentQuery, useLoginMutation } from "../app/services/userApi"
+import {
+  useLazyCurrentQuery,
+  useLoginMutation,
+} from "../../app/services/userApi"
 import { useNavigate } from "react-router-dom"
-import ErrorMessage from "../components/error-message"
-import { hasErrorField } from "../utils/has-error-field"
+import ErrorMessage from "../../components/error-message"
+import { hasErrorField } from "../../utils/has-error-field"
 
 type Login = { email: string; password: string }
 type Props = { setSelected: (value: string) => void }
@@ -28,7 +31,7 @@ const Login: React.FC<Props> = ({ setSelected }) => {
   const onSubmit = async (data: Login) => {
     try {
       await login(data).unwrap()
-      await triggerCurrentCuery()
+      await triggerCurrentCuery().unwrap()
       navigate("/")
     } catch (error) {
       if (hasErrorField(error)) {

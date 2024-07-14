@@ -8,6 +8,7 @@ import {
   selectIsAuthenticated,
   selectUser,
 } from "../../features/user/userSlice"
+import { Profile } from "../profile"
 
 const Layout = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated)
@@ -18,6 +19,7 @@ const Layout = () => {
       navigate("/auth")
     }
   }, [])
+  /* Children from router are loaded into the Outlet */
   return (
     <>
       <Header />
@@ -28,7 +30,9 @@ const Layout = () => {
         <div className="flex-1 p-4">
           <Outlet />
         </div>
-        <div className="flex-2 p-4"></div>
+        <div className="flex-2 p-4">
+          <div className="flex-col flex gap-5">{!user && <Profile />}</div>
+        </div>
       </Container>
     </>
   )

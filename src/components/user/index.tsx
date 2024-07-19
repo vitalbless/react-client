@@ -1,4 +1,6 @@
 import React from "react"
+import { BASE_URL } from "../../constants"
+import { User as NextUiUser } from "@nextui-org/react"
 
 type Props = {
   name: string
@@ -13,5 +15,14 @@ export const User: React.FC<Props> = ({
   description = "",
   className = "",
 }) => {
-  return <div>User</div>
+  return (
+    <NextUiUser
+      name={name}
+      className={className}
+      description={description}
+      avatarProps={{
+        src: `${BASE_URL}${avatarUrl}`,
+      }}
+    />
+  )
 }

@@ -1,5 +1,4 @@
 import { Input as NextInput } from "@nextui-org/react"
-import React from "react"
 import { Control, useController } from "react-hook-form"
 
 type Props = {

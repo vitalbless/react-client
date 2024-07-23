@@ -36,6 +36,22 @@ const CurrentPost = () => {
         createdAt={createdAt}
         cardFor="current-post"
       />
+      <div className="mt-10">
+        {data.comments
+          ? data.comments.map(comment => (
+              <Card
+                cardFor="comment"
+                key={comment.id}
+                avatarUrl={comment.user.avatarUrl ?? ""}
+                content={comment.content}
+                name={comment.user.name ?? ""}
+                authorId={comment.userId}
+                commentId={comment.id}
+                id={id}
+              />
+            ))
+          : null}
+      </div>
     </>
   )
 }

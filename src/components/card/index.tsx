@@ -88,7 +88,7 @@ export const Card: React.FC<Props> = ({
         await triggerGetAllPosts().unwrap()
         break
       case "current-post":
-        await triggerGetAllPosts().unwrap()
+        await triggerGetPostById(id).unwrap()
         break
       case "comment":
         await triggerGetPostById(id).unwrap()
@@ -110,7 +110,7 @@ export const Card: React.FC<Props> = ({
           navigate("/")
           break
         case "comment":
-          await deleteComment(id).unwrap()
+          await deleteComment(commentId).unwrap()
           await refetchPosts()
           break
         default:

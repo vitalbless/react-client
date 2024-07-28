@@ -22,6 +22,7 @@ import { CiEdit } from "react-icons/ci"
 import { ProfileInfo } from "../../components/profile-info"
 import { formatToClientDate } from "../../utils/format-to-client-date"
 import { CountInfo } from "../../components/count-info"
+import { EditProfile } from "../../components/edit-profile"
 
 export const UserProfile = () => {
   const { id } = useParams<{ id: string }>()
@@ -46,10 +47,22 @@ export const UserProfile = () => {
     return null
   }
 
+  const handleFollow = async () => {
+    try {
+      if (id) {
+        data?.isFollowing
+          ? await unfollowUser(id).unwrap()
+          : await followUser({ followingId: id }).unwrap()
+        await triggerGetUserByIdQuery(id)
+        await triggerCurrentQuery()
+      }
+    } catch (error) {}
+  }
+
   return (
     <>
       <GoBack />
-      <div className="flex items-center gap-4">
+      <div className="flex items-stretch  gap-4">
         <Card className="flex flex-col items-center text-center space-y-4 p-5">
           <Image
             src={`${BASE_URL}${data?.avatarUrl}`}
@@ -62,11 +75,12 @@ export const UserProfile = () => {
             {data.name}
             {currentUser?.id !== id ? (
               <Button
-                color={data.isFollowing ? "default" : "primary"}
+                color={data?.isFollowing ? "default" : "primary"}
                 variant="flat"
+                onClick={handleFollow}
                 className="gap-2"
                 endContent={
-                  data.isFollowing ? (
+                  data?.isFollowing ? (
                     <MdOutlinePersonAddDisabled />
                   ) : (
                     <MdOutlinePersonAddAlt1 />
@@ -76,7 +90,9 @@ export const UserProfile = () => {
                 {data.isFollowing ? "Отписаться" : "Подписаться"}
               </Button>
             ) : (
-              <Button endContent={<CiEdit />}>Редактировать</Button>
+              <Button onClick={() => onOpen()} endContent={<CiEdit />}>
+                Редактировать
+              </Button>
             )}
           </div>
         </Card>
@@ -93,9 +109,11 @@ export const UserProfile = () => {
           <ProfileInfo title="Обо мне" info={data.bio}></ProfileInfo>
           <div className="flex gap-2">
             <CountInfo title="Подписчики" count={data.followers.length} />
+            <CountInfo title="Подписки" count={data.following.length} />
           </div>
         </Card>
       </div>
+      <EditProfile isOpen={isOpen} onClose={onClose} user={data}></EditProfile>
     </>
   )
 }

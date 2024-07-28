@@ -10,9 +10,9 @@ import Auth from "./pages/auth"
 import Layout from "./components/layout"
 import Posts from "./pages/posts"
 import CurrentPost from "./pages/current-post"
-import UserProfile from "./pages/user-profile"
-import Followers from "./pages/followers"
-import Following from "./pages/following"
+import { UserProfile } from "./pages/user-profile"
+import { Followers } from "./pages/followers"
+import { Following } from "./pages/following"
 import { AuthGuard } from "./features/user/authGuard"
 
 const container = document.getElementById("root")

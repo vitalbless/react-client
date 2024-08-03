@@ -16,6 +16,7 @@ import {
 import Input from "../input"
 import { MdOutlineEmail } from "react-icons/md"
 import ErrorMessage from "../error-message"
+import { hasErrorField } from "../../utils/has-error-field"
 
 type Props = {
   isOpen: boolean
@@ -51,7 +52,33 @@ export const EditProfile: React.FC<Props> = ({
       setSelectedFile(event.target.files[0])
     }
   }
-  const onSubmit = () => {}
+  const onSubmit = async (data: User) => {
+    if (id) {
+      try {
+        const formData = new FormData()
+        data.name && formData.append("name", data.name)
+        data.email &&
+          data.email !== user?.email &&
+          formData.append("email", data.email)
+        data.dateOfBirth &&
+          formData.append(
+            "dateOfBirth",
+            new Date(data.dateOfBirth).toISOString(),
+          )
+        data.bio && formData.append("bio", data.bio)
+        data.location && formData.append("location", data.location)
+        selectedFile && formData.append("avatar", selectedFile)
+
+        await updateUser({ userData: formData, id }).unwrap()
+        onClose()
+      } catch (err) {
+        console.log(err)
+        if (hasErrorField(err)) {
+          setError(err.data.error)
+        }
+      }
+    }
+  }
   return (
     <Modal
       isOpen={isOpen}

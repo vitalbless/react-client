@@ -59,13 +59,24 @@ export const UserProfile = () => {
     } catch (error) {}
   }
 
+  const handleClose = async () => {
+    try {
+      if (id) {
+        await triggerGetUserByIdQuery(id)
+        await triggerCurrentQuery()
+        onClose()
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
     <>
       <GoBack />
       <div className="flex items-stretch  gap-4">
         <Card className="flex flex-col items-center text-center space-y-4 p-5">
           <Image
-            src={`${BASE_URL}${data?.avatarUrl}`}
+            src={`${BASE_URL}${data.avatarUrl}`}
             alt={data.name}
             width={200}
             height={200}
@@ -113,7 +124,11 @@ export const UserProfile = () => {
           </div>
         </Card>
       </div>
-      <EditProfile isOpen={isOpen} onClose={onClose} user={data}></EditProfile>
+      <EditProfile
+        isOpen={isOpen}
+        onClose={handleClose}
+        user={data}
+      ></EditProfile>
     </>
   )
 }
